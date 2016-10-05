@@ -1,0 +1,35 @@
+@import "../base/_vars.styl";
+
+.nav-bar {
+  width: 100%;
+  max-width: 540px;
+  height: 100px;
+
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+}
+
+.button {
+  border: 1px solid $red;
+  height: 100px;
+  flex-basis: 33.333333%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $white;
+  color: $red;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: $light-red;
+  }
+}
+
+.selected {
+  background: $red;
+  color: $white;
+}
