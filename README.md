@@ -8,6 +8,9 @@
 # install dependencies
 npm install
 
+# start backend server
+node server.js
+
 # serve with hot reload at localhost:8080
 npm run dev
 

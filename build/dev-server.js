@@ -2,6 +2,9 @@ var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
 var config = require('../config')
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var request = require('request');
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
@@ -55,6 +58,33 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+
+// Express Configuration
+// -----------------------------------------------------
+// Logging and Parsing
+app.use(morgan('dev'));                                         // log with Morgan
+app.use(bodyParser.json());                                     // parse application/json
+app.use(bodyParser.urlencoded({extended: true}));               // parse application/x-www-form-urlencoded
+app.use(bodyParser.text());                                     // allows bodyParser to look at raw text
+app.use(bodyParser.json({ type: 'application/vnd.api+json'}));  // parse application/vnd.api+json as json
+
+function makeUrl(streamers) {
+  return 'https://api.twitch.tv/kraken/streams?client_id=se018r7lxrfo1mty4x09djktl2ajfsy&channel=' + streamers.join(',');
+}
+
+app.post('/getStreamerList', function(req, res, next){
+  console.log(req.body);
+  var url = makeUrl(req.body);
+  console.log(url);
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // The response from forecast.io is a string, so convert it to an object using JSON.parse
+      var data = JSON.parse(body);
+      console.log(data);
+      res.json(data);
+    }
+  });
+});
 
 module.exports = app.listen(port, function (err) {
   if (err) {

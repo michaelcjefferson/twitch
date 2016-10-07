@@ -1,11 +1,17 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="streamerlist-container">
+    <streamer v-for="streamer in streamers" :streamer="streamer"></streamer>
   </div>
 </template>
 
 <script>
+import Streamer from './Streamer'
+
 export default {
+  components: {
+    Streamer
+  },
+  props: ['streamers'],
   data () {
     return {
       msg: 'Hello shoe!'
@@ -16,7 +22,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="styl" scoped>
-h1 {
-  color: #42b983;
+.streamerlist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
 }
 </style>

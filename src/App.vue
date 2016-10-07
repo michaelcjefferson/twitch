@@ -1,7 +1,8 @@
 <template>
   <div class="app">
     <nav-bar></nav-bar>
-    <streamer-list></streamer-list>
+    <streamer-list :streamers="liveStreamers"></streamer-list>
+    <button type="button" name="button" @click="updateStreamerList(streamers)">Update</button>
   </div>
 </template>
 
@@ -13,6 +14,22 @@ export default {
   components: {
     NavBar,
     StreamerList
+  },
+  data () {
+    return {
+      streamers: ['manvsgame', 'northernlion', 'lovelymomo', 'rockleesmile', 'brunofin', 'etozhemad', 'freecodecamp', 'dansgaming'],
+      liveStreamers: []
+    }
+  },
+  methods: {
+    updateStreamerList: function (streamers) {
+      this.$http.post('/getStreamerList', streamers).then((res) => {
+        console.log(res)
+        this.liveStreamers = res.body.streams
+      }, (res) => {
+        console.log(res)
+      })
+    }
   }
 }
 </script>

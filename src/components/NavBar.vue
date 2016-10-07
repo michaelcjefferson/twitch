@@ -1,8 +1,8 @@
 <template>
   <nav class="nav-bar">
     <div class="buttons" :class="activeButton">
-      <button class="button all" @click="updateNav('all')">ALL</button>
       <button class="button online" @click="updateNav('online')">ONLINE</button>
+      <button class="button all" @click="updateNav('all')">ALL</button>
       <button class="button find" @click="updateNav('find')">FIND STREAMERS</button>
     </div>
   </nav>
@@ -10,12 +10,9 @@
 
 <script>
 export default {
-  // components: {
-  //   NavButton
-  // },
   data () {
     return {
-      activeButton: 'all'
+      activeButton: 'online'
     }
   },
   methods: {
