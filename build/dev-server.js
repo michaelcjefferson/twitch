@@ -68,19 +68,31 @@ app.use(bodyParser.urlencoded({extended: true}));               // parse applica
 app.use(bodyParser.text());                                     // allows bodyParser to look at raw text
 app.use(bodyParser.json({ type: 'application/vnd.api+json'}));  // parse application/vnd.api+json as json
 
-function makeUrl(streamers) {
+function makeLiveStreamersUrl(streamers) {
   return 'https://api.twitch.tv/kraken/streams?client_id=se018r7lxrfo1mty4x09djktl2ajfsy&channel=' + streamers.join(',');
 }
 
+function makeOfflineStreamerUrl(streamer) {
+  return 'https://api.twitch.tv/kraken/channels/' + streamer + '?client_id=se018r7lxrfo1mty4x09djktl2ajfsy';
+}
+
 app.post('/getStreamerList', function(req, res, next){
-  console.log(req.body);
-  var url = makeUrl(req.body);
-  console.log(url);
+  var url = makeLiveStreamersUrl(req.body);
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // The response from forecast.io is a string, so convert it to an object using JSON.parse
       var data = JSON.parse(body);
-      console.log(data);
+      res.json(data);
+    }
+  });
+});
+
+app.post('/getOfflineStreamers', function(req, res, next){
+  var url = makeOfflineStreamerUrl(req.body.streamer);
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // The response from forecast.io is a string, so convert it to an object using JSON.parse
+      var data = JSON.parse(body);
       res.json(data);
     }
   });

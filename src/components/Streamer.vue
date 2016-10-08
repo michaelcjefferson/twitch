@@ -1,6 +1,6 @@
 <template>
   <div class="streamer-container">
-    <div class="streamer-name">{{ streamer.channel.display_name }}</div>
+    <div class="streamer-name">{{ streamer.display_name }}</div>
     <div class="streamer-game">{{ streamer.game }}</div>
   </div>
 </template>
