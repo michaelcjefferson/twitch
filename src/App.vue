@@ -1,8 +1,8 @@
 <template>
   <div class="app">
     <nav-bar></nav-bar>
-    <streamer-list :streamers="liveStreamers"></streamer-list>
-    <button type="button" name="button" @click="updateLiveStreamerList(streamers)">Update</button>
+    <streamer-list :streamers="streamers"></streamer-list>
+    <button type="button" name="button" @click="updateLiveStreamerList(streamersNames)">Update</button>
   </div>
 </template>
 
@@ -17,17 +17,16 @@ export default {
   },
   data () {
     return {
-      streamers: ['manvsgame', 'northernlion', 'lovelymomo', 'rockleesmile', 'brunofin', 'etozhemad', 'freecodecamp', 'dansgaming'],
-      liveStreamers: [],
+      streamersNames: ['manvsgame', 'northernlion', 'lovelymomo', 'rockleesmile', 'brunofin', 'etozhemad', 'freecodecamp', 'dansgaming', 'baertaffy', 'quill18', 'roundtablepodcast'],
+      streamers: [],
       liveStreamersNames: [],
-      offlineStreamers: [],
       offlineStreamersNames: []
     }
   },
   methods: {
     updateLiveStreamerList: function (streamers) {
       this.$http.post('/getStreamerList', streamers).then((res) => {
-        this.liveStreamers = []
+        this.streamers = []
         this.liveStreamersNames = []
         const streams = res.body.streams
         streams.forEach((s) => {
@@ -38,26 +37,39 @@ export default {
             game: s.game,
             status: s.channel.status,
             logo: s.channel.logo,
-            preview: s.preview.medium
+            preview: s.preview.medium,
+            online: true
           }
-          this.liveStreamers.push(streamer)
+          this.streamers.push(streamer)
           this.liveStreamersNames.push(streamer.name)
         })
-        this.updateOfflineStreamerList(this.streamers, this.liveStreamersNames)
+        this.updateOfflineStreamerList(this.streamersNames, this.liveStreamersNames)
       }, (res) => {
         console.log(res)
       })
     },
     updateOfflineStreamerList: function (streamers, liveStreamers) {
       this.offlineStreamersNames = []
-      this.offlineStreamers = []
       this.offlineStreamersNames = streamers.filter((s) => {
-        return !(liveStreamers.indexOf(s) !== -1)
+        return liveStreamers.indexOf(s) === -1
       })
       this.offlineStreamersNames.forEach((streamer) => {
-        console.log(streamer)
         this.$http.post('/getOfflineStreamers', {streamer: streamer}).then((res) => {
-          console.log(res)
+          const s = res.body
+          if (s.name) {
+            const streamer = {
+              name: s.name,
+              display_name: s.display_name,
+              logo: s.logo,
+              online: false
+            }
+            this.streamers.push(streamer)
+          } else {
+            const streamer = {
+              message: s.message
+            }
+            this.streamers.push(streamer)
+          }
         }, (res) => {
           console.log(res)
         })
@@ -79,6 +91,6 @@ html {
 .app {
   height: 100vh;
   width: 100%;
-  max-width: 600px;
+  max-width: 920px;
 }
 </style>

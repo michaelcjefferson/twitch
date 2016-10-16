@@ -90,11 +90,8 @@ app.post('/getStreamerList', function(req, res, next){
 app.post('/getOfflineStreamers', function(req, res, next){
   var url = makeOfflineStreamerUrl(req.body.streamer);
   request(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // The response from forecast.io is a string, so convert it to an object using JSON.parse
-      var data = JSON.parse(body);
-      res.json(data);
-    }
+    var data = JSON.parse(body);
+    res.json(data);
   });
 });
 
