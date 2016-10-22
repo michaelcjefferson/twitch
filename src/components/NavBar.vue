@@ -10,14 +10,15 @@
 
 <script>
 export default {
-  data () {
-    return {
-      activeButton: 'online'
-    }
-  },
+  // data () {
+  //   return {
+  //     activeButton: 'online'
+  //   }
+  // },
+  props: ['activeButton'],
   methods: {
     updateNav: function (buttonType) {
-      this.activeButton = buttonType
+      this.$emit('updateNav', buttonType)
     }
   }
 }

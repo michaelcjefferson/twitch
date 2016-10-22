@@ -90,6 +90,8 @@ app.post('/getStreamerList', function(req, res, next){
 app.post('/getOfflineStreamers', function(req, res, next){
   var url = makeOfflineStreamerUrl(req.body.streamer);
   request(url, function (error, response, body) {
+    console.log(error);
+    console.log(body);
     var data = JSON.parse(body);
     res.json(data);
   });

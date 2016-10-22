@@ -1,6 +1,14 @@
 <template>
-  <div class="streamerlist-container">
-    <streamer v-for="streamer in streamers" :streamer="streamer"></streamer>
+  <div class="streamerlist">
+    <div class="onlinestreamerlist-container">
+      <streamer v-for="streamer in liveStreamers" :streamer="streamer"></streamer>
+    </div>
+    <div v-if="activeButton === 'all'" class="offlinestreamerlist-container">
+      <streamer v-for="streamer in offlineStreamers" :streamer="streamer"></streamer>
+    </div>
+    <div v-if="activeButton === 'all'" class="notfoundstreamerlist-container">
+      <streamer v-for="streamer in notFoundStreamers" :streamer="streamer"></streamer>
+    </div>
   </div>
 </template>
 
@@ -8,15 +16,15 @@
 import Streamer from './Streamer'
 
 export default {
+  // data () {
+  //   return {
+  //     msg: 'Hello shoe!'
+  //   }
+  // },
   components: {
     Streamer
   },
-  props: ['streamers'],
-  data () {
-    return {
-      msg: 'Hello shoe!'
-    }
-  }
+  props: ['liveStreamers', 'offlineStreamers', 'notFoundStreamers', 'activeButton']
 }
 </script>
 
