@@ -3,18 +3,13 @@
     <div class="buttons" :class="activeButton">
       <button class="button online" @click="updateNav('online')">ONLINE</button>
       <button class="button all" @click="updateNav('all')">ALL</button>
-      <button class="button find" @click="updateNav('find')">FIND STREAMERS</button>
+      <button class="button add" @click="updateNav('add')">ADD STREAMER</button>
     </div>
   </nav>
 </template>
 
 <script>
 export default {
-  // data () {
-  //   return {
-  //     activeButton: 'online'
-  //   }
-  // },
   props: ['activeButton'],
   methods: {
     updateNav: function (buttonType) {
@@ -60,7 +55,7 @@ export default {
 
 .all .all,
 .online .online,
-.find .find {
+.add .add {
   background: $red;
   color: $white;
 }

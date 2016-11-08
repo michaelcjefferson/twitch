@@ -4,10 +4,6 @@
 
 <script>
 export default {
-  // data: {
-  //   return {
-  //   }
-  // },
   props: ['buttonType', 'isSelected'],
   methods: {
     toggleActive: function (event) {
@@ -19,5 +15,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="styl" scoped>
-/*@import "../styles/modules/_nav.styl";*/
 </style>
