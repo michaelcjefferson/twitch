@@ -1,6 +1,6 @@
 <template>
   <div class="streamer-box">
-    <div v-if="streamer.online" class="streamer-container online">
+    <div class="streamer-container online">
       <a :href="streamer.url" class="streamer-title" target="_blank" rel="noopener noreferrer">
         <div class="streamer-name--online">{{ streamer.display_name }}</div>
         <img class="streamer-logo" :src="streamer.logo"></img>
@@ -10,15 +10,6 @@
         <div class="streamer-status">{{ streamer.status }}</div>
       </div>
       <img class="streamer-preview" :src="streamer.preview"></img>
-    </a>
-
-    <div v-if="!streamer.online && streamer.name" class="streamer-container offline">
-      <div class="streamer-name">{{ streamer.display_name }}</div>
-      <div class="streamer-online">OFFLINE</div>
-    </div>
-
-    <div v-if="streamer.message" class="streamer-container nonexistant">
-      <div class="streamer-message">{{ streamer.message }}</div>
     </div>
   </div>
 </template>

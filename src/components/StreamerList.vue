@@ -1,20 +1,22 @@
 <template>
   <div class="streamerlist">
     <div class="streamerlist-container onlinestreamers">
-      <streamer v-for="streamer in liveStreamers" :streamer="streamer"></streamer>
+      <online-streamer v-for="streamer in liveStreamers" :streamer="streamer"></online-streamer>
     </div>
     <div v-if="activeButton === 'all'" class="streamerlist-container offlinestreamers">
-      <streamer v-for="streamer in offlineStreamers" :streamer="streamer"></streamer>
+      <offline-streamer v-for="streamer in offlineStreamers" :streamer="streamer"></offline-streamer>
     </div>
     <div v-if="activeButton === 'all'" class="streamerlist-container notfoundstreamers">
-      <streamer v-for="streamer in notFoundStreamers" :streamer="streamer"></streamer>
+      <not-found-streamer v-for="streamer in notFoundStreamers" :streamer="streamer"></not-found-streamer>
     </div>
     <button type="button" name="button" @click="updateAllStreamerLists()" class="streamerlist-button">Update</button>
   </div>
 </template>
 
 <script>
-import Streamer from './Streamer'
+import OnlineStreamer from './OnlineStreamer'
+import OfflineStreamer from './OfflineStreamer'
+import NotFoundStreamer from './NotFoundStreamer'
 
 export default {
   data () {
@@ -27,7 +29,9 @@ export default {
     }
   },
   components: {
-    Streamer
+    OnlineStreamer,
+    OfflineStreamer,
+    NotFoundStreamer
   },
   props: ['streamersNames', 'activeButton'],
   mounted () {
@@ -60,7 +64,8 @@ export default {
       setTimeout(this.updateAllStreamerLists, 60000)
     },
     getLiveStreamers: function () {
-      return this.$http.post('/getStreamerList', this.streamersNames).then((res) => {
+      const onlineStreamersUrl = 'https://api.twitch.tv/kraken/streams?client_id=se018r7lxrfo1mty4x09djktl2ajfsy&channel=' + this.streamersNames.join(',')
+      return this.$http.get(onlineStreamersUrl).then((res) => {
         const streams = res.body.streams
         return streams
       }, (res) => {
@@ -74,7 +79,8 @@ export default {
         return this.liveStreamersNames.indexOf(s) === -1
       })
       this.offlineStreamersNames.forEach((streamer) => {
-        this.$http.post('/getOfflineStreamers', {streamer: streamer}).then((res) => {
+        const offlineStreamerUrl = 'https://api.twitch.tv/kraken/channels/' + streamer + '?client_id=se018r7lxrfo1mty4x09djktl2ajfsy'
+        this.$http.get(offlineStreamerUrl).then((res) => {
           const s = res.body
           if (s.name) {
             const streamer = {
@@ -84,14 +90,20 @@ export default {
               online: false
             }
             this.offlineStreamers.push(streamer)
-          } else {
-            const streamer = {
-              message: s.message
-            }
-            this.notFoundStreamers.push(streamer)
           }
         }, (res) => {
           console.log(res)
+          if (res.code === 'ETIMEDOUT') {
+            const streamer = {
+              message: 'The server took too long to respond with information about this user. Please try again.'
+            }
+            this.notFoundStreamers.push(streamer)
+          } else if (res.statusText === 'Not Found') {
+            const streamer = {
+              message: res.body.message
+            }
+            this.notFoundStreamers.push(streamer)
+          }
         })
       })
     }

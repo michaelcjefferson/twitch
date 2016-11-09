@@ -44,3 +44,5 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 6. HALFWAY DONE Catch and pass timeout errors, which are returning an undefined object which breaks the server
 
 7. Do some testing, for example what happens if someone spams the update button, it will probably stack up api calls which wouldn't be pretty. In that case, add an abort previous request functionality into the vue-resource call https://github.com/vuejs/vue-resource/blob/master/docs/recipes.md. This will possibly be troublesome, because each offline streamer has to make it's own request, so either each offline streamer's requests will have to be tracked separately, or it might be possible to make an array of all offline streamer requests that have been made and remove them all when updateOfflineStreamerList is called
+
+8. Find a way to prevent the 404 message being logged in the client's console. To do this, something other than vue-resource will have to be used for the api calls, because vue-resource doesn't allow this to be changed
